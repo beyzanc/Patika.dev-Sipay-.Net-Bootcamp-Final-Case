@@ -177,14 +177,39 @@ The rules that validate regex expressions, some of which are special methods, ar
 ## Object-Oriented Programming in the ResiPay
 
 - **Abstraction:** Abstraction is achieved in the ResiPay project through the use of interfaces allowing the decoupling of concrete implementations from clients and promoting modularity.
+```
+  public interface IUserService
+      {
+          Base<UserViewModel> GetAllUsers();
+          // ...
+      }
+```
 
 - **Polymorphism:** Polymorphism is evident in the project as different classes implement the same interfaces enabling interchangeable usage of various repository implementations without impacting the client code.
+```
+      public Base<UserViewModel> Update(UserViewModel user, int id)
+      {
+          // ...
+      }
+```
 
 - **Encapsulation:** Encapsulation is practiced in the project by encapsulating data and behavior within classes. For example, the User class encapsulates its properties, and access to them is controlled through getters and setters, ensuring data integrity.
+```  
+      public class User
+      {
+          public string Name { get; set; }
+          // ...
+      }
+```
 
 - **Inheritance:** Inheritance is utilized in the project through the Base classses, which serves as the base class for domain models like Message. This enables code reuse and promotes a consistent structure across domain entities.
+```
+      public class User : BaseEntity
+      {
+            // ...
+      }
+```
   
-
 ## Built With
 
 - ASP.NET Core 6.0 as Web Framework
