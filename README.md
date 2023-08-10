@@ -144,7 +144,7 @@ The ResiPay application uses the **"MailJobService"** to send payment reminders 
 
 ## Token Service
 
-The ResiPay application includes a "TokenService" responsible for generating and validating **JSON Web Tokens** (JWT). However, due to time constraints, this service is currently not actively utilized in the project.
+The ResiPay application includes a "TokenService" responsible for generating and validating **JSON Web Tokens** (JWT).
 
 ### Functionality:
 
