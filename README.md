@@ -1,5 +1,20 @@
 # ResiPay - Residential Payment System
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [How to Use](#how-to-use)
+- [Port Information](#port-information)
+- [Database Relationships](#database-relationships)
+- [Entities](#entities)
+- [Process of Password Hashing](#process-of-password-hashing)
+- [Sending Mail](#sending-mail)
+- [Token Service](#token-service)
+- [Fluent Validation](#fluent-validation)
+- [Object-Oriented Programming in the ResiPay](#object-oriented-programming-in-the-resipay)
+- [Built With](#built-with)
+
+
 ## Prerequisites
 Before proceeding, make sure you have the following installed on your machine:
 
@@ -19,8 +34,34 @@ Before proceeding, make sure you have the following installed on your machine:
    
    `dotnet ef database update`
 6. Build and run project.
+7. After connecting to Swagger -or any other you prefer-, navigate to the **Login** endpoint using a **POST** request.
+8. Use the following JSON payload:
+   ``` 
+      {
+           "email": "admin@gmail.com",
+           "password": "deneme"
+      } 
+   ```
+   This will provide you with a token upon successful login as **admin**.
+9. Copy the token from the response. To access authorized routes, add the copied token to the authorization header of your requests.
+
+## Port Information
+
+Here is a list of ports used in the ResiPay project:
+
+| Port Number | Description                                     |
+|-------------|-------------------------------------------------|
+| 30455       | IIS Express - Application (Swagger)            |
+| 44317       | IIS Express - SSL Port                         |
+| 5000        | ResiPay - User Side (HTTP)                     |
+| 5001        | ResiPay - User Side (HTTPS)                    |
+| 27017       | MongoDB Connection Port                        |
+| 5432        | PostgreSQL Connection Port                     |
+| 587         | SMTP Server Port (Ethereal Email)              |
 
 ## Database Relationships
+
+![](https://github.com/beyzanc/Patika.dev-Sipay-.Net-Bootcamp-Final-Case/blob/main/Blank%20diagram.png)
 
 ### Apartment - Bill (One-to-Many):
 
@@ -28,10 +69,10 @@ Before proceeding, make sure you have the following installed on your machine:
 - The "Bill" entity has a foreign key "ApartmentId" that references the "Apartment" entity.
 - Each bill is associated with a specific apartment.
 
-### User - Apartment (Many-to-Many):
+### User - Apartment (One-to-Many):
 
-- A user can be associated with multiple apartments, and an apartment can have multiple users (Many-to-Many relationship).
-- The "User" entity has a many-to-many relationship with the "Apartment" entity through a junction table named "UserApartments".
+- A user can be associated with one apartments, and an apartment can have multiple users (Many-to-Many relationship).
+- The "User" entity has a one-to-many relationship with the "Apartment" entity through a junction table named "UserApartments".
 - The "UserApartments" table contains the foreign keys "UserId" and "ApartmentId" to link users and apartments.
 
 ### User - Bill (One-to-Many):
@@ -54,7 +95,6 @@ Before proceeding, make sure you have the following installed on your machine:
 
 
 ## Entities
-
 
 ### User:
 
@@ -86,13 +126,14 @@ Before proceeding, make sure you have the following installed on your machine:
 - Stores information about the subject, content, sender, receiver, read status, and deletion status.
 - Associated with a user as both sender and receiver.
 
+
 ## Process of Password Hashing 
 
 1. During user registration, the provided password is subjected to the Hasher.GetHash() method.
 
 2. The GetHash() method utilizes **SHA-256** to create a cryptographic hash of the password.
 
-3. The resulting hash is represented as a hexadecimal string, ensuring it remains secure and irreversible.
+3. The resulting hash is represented **as a hexadecimal string**, ensuring it remains secure and irreversible.
 
 4. The hashed password is stored in the database for later verification during login.
 
@@ -103,17 +144,13 @@ The ResiPay application uses the **"MailJobService"** to send payment reminders 
 
 ## Token Service
 
-The ResiPay application includes a "TokenService" responsible for generating and validating JSON Web Tokens (JWT). However, due to time constraints, this service is currently not actively utilized in the project.
+The ResiPay application includes a "TokenService" responsible for generating and validating **JSON Web Tokens** (JWT). However, due to time constraints, this service is currently not actively utilized in the project.
 
 ### Functionality:
 
-**GenerateToken:** The "GenerateToken" method generates a JWT for a given user. It includes the user's ID as a claim and sets the token's expiration to 3 days from the current date.
+**GenerateToken:** The "GenerateToken" method generates a JWT for a given user. It includes the user's ID as a claim and sets the token's expiration to *7 days from the current date*.
 
 **ValidateToken:** The "ValidateToken" method validates a provided JWT. It checks the token's signature, expiration, and issuer without validating the audience. If the token is valid, it extracts the user's ID from the token's claims.
-
-### Not in Active Use:
-
-*As of the current implementation, the token service is not actively utilized in the ResiPay project. It remains a part of the codebase and can be utilized for authentication and authorization purposes in future enhancements.*
 
 ## Fluent Validation
 
@@ -131,6 +168,22 @@ The rules that validate regex expressions, some of which are special methods, ar
 
 - **CarPlate:** The regex expression used for CarPlate validation ensures that the provided car plate number follows the standard Turkish car plate format with two letters, followed by one to three capital letters, and ending with two to four digits.
 
+### Why Fluent Validation instead of Data Annotation
+
+- It provides more control over validation rules.
+- View models must be seperated from validation models to have SOLİD - Single Responsibility principle.
+- Unit testing is exponentially easier.
+
+## Object-Oriented Programming in the ResiPay
+
+- **Abstraction:** Abstraction is achieved in the ResiPay project through the use of interfaces allowing the decoupling of concrete implementations from clients and promoting modularity.
+
+- **Polymorphism:** Polymorphism is evident in the project as different classes implement the same interfaces enabling interchangeable usage of various repository implementations without impacting the client code.
+
+- **Encapsulation:** Encapsulation is practiced in the project by encapsulating data and behavior within classes. For example, the User class encapsulates its properties, and access to them is controlled through getters and setters, ensuring data integrity.
+
+- **Inheritance:** Inheritance is utilized in the project through the Base classses, which serves as the base class for domain models like Message. This enables code reuse and promotes a consistent structure across domain entities.
+  
 
 ## Built With
 
